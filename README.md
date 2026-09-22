@@ -71,4 +71,4 @@ Each feature is built on its own `feature/<name>` branch, pushed for review/merg
 4. ✅ Bookings (list, review, update status)
 5. ✅ Visa Requests (list, review, update status)
 6. ✅ Documents (browse uploaded visa documents)
-7. Notifications (send to a customer, view sent history)
+7. ✅ Notifications (send to a customer, view sent history)
