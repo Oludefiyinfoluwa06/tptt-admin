@@ -66,7 +66,7 @@ Each feature is built on its own `feature/<name>` branch, pushed for review/merg
 ## Roadmap
 
 1. ✅ Auth (admin-only login) + dashboard shell (sidebar nav, header, stat-card overview)
-2. Customers (list, search)
+2. ✅ Customers (list, search)
 3. Packages (CRUD)
 4. Bookings (list, review, update status)
 5. Visa Requests (list, review, update status)
