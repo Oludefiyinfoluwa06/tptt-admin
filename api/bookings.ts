@@ -17,3 +17,8 @@ export async function getBookings(): Promise<Booking[]> {
   const { data } = await apiClient.get<{ bookings: Booking[] }>("/bookings");
   return data.bookings;
 }
+
+export async function updateBookingStatus(id: string, status: BookingStatus): Promise<Booking> {
+  const { data } = await apiClient.patch<{ booking: Booking }>(`/bookings/${id}/status`, { status });
+  return data.booking;
+}
