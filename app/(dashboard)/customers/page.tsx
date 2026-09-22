@@ -9,12 +9,7 @@ import { useMemo, useState } from "react";
 import { getUsers } from "@/api/auth";
 import { PlaceholderPage } from "@/components/placeholder-page";
 import { getErrorMessage } from "@/lib/api-client";
-
-const dateFormatter = new Intl.DateTimeFormat("en-US", {
-  month: "short",
-  day: "numeric",
-  year: "numeric",
-});
+import { formatDate } from "@/lib/format";
 
 export default function CustomersPage() {
   const [search, setSearch] = useState("");
@@ -100,7 +95,7 @@ export default function CustomersPage() {
                   </Table.Td>
                   <Table.Td>{customer.email}</Table.Td>
                   <Table.Td>{customer.phone || "—"}</Table.Td>
-                  <Table.Td>{dateFormatter.format(new Date(customer.createdAt))}</Table.Td>
+                  <Table.Td>{formatDate(customer.createdAt)}</Table.Td>
                 </Table.Tr>
               ))}
             </Table.Tbody>

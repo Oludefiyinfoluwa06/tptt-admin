@@ -7,3 +7,13 @@ const currencyFormatter = new Intl.NumberFormat("en-US", {
 export function formatPrice(amount: number): string {
   return currencyFormatter.format(amount);
 }
+
+const dateFormatter = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+
+export function formatDate(date: string | Date): string {
+  return dateFormatter.format(new Date(date));
+}
