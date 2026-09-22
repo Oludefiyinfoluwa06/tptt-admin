@@ -27,10 +27,11 @@ app/
     ├── visa-requests/page.tsx
     ├── documents/page.tsx
     └── notifications/page.tsx
-api/                # Axios-backed API functions per resource
-lib/                  # api-client.ts (axios instance + JWT interceptor), auth-storage.ts
+api/                # Axios-backed API functions per resource (auth, packages, bookings, visa, documents, notifications)
+lib/                  # api-client.ts (axios instance + JWT interceptor), auth-storage.ts, format.ts (formatPrice, formatDate)
 context/                # auth-context.tsx (AuthProvider, useAuth)
-components/               # Shared UI: nav-links config, StatCard, PlaceholderPage
+components/               # Shared UI: nav-links config, StatCard, PlaceholderPage, StatusBadge,
+                          # PackageFormModal, ConfirmDeleteModal, SendNotificationModal
 providers.tsx               # Client wrapper: MantineProvider + QueryClientProvider + AuthProvider
 ```
 
