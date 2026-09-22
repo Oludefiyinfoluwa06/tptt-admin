@@ -16,3 +16,8 @@ export async function getVisaRequests(): Promise<VisaRequest[]> {
   const { data } = await apiClient.get<{ visaRequests: VisaRequest[] }>("/visa");
   return data.visaRequests;
 }
+
+export async function updateVisaRequestStatus(id: string, status: VisaStatus): Promise<VisaRequest> {
+  const { data } = await apiClient.patch<{ visaRequest: VisaRequest }>(`/visa/${id}/status`, { status });
+  return data.visaRequest;
+}
