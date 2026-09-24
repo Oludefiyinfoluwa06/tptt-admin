@@ -3,11 +3,13 @@
 import { SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import { IconCalendarEvent, IconEPassport, IconLuggage, IconUsers } from "@tabler/icons-react";
 import { useQuery } from "@tanstack/react-query";
+import { useMemo } from "react";
 
 import { getUsers } from "@/api/auth";
 import { getBookings } from "@/api/bookings";
 import { getPackages } from "@/api/packages";
 import { getVisaRequests } from "@/api/visa";
+import { RecentActivity, type ActivityItem } from "@/components/recent-activity";
 import { StatCard } from "@/components/stat-card";
 
 export default function DashboardPage() {
@@ -18,6 +20,30 @@ export default function DashboardPage() {
 
   const customerCount = usersQuery.data?.filter((u) => u.role === "customer").length;
   const pendingBookings = bookingsQuery.data?.filter((b) => b.status === "pending").length;
+
+  const recentActivity = useMemo<ActivityItem[]>(() => {
+    const bookingItems: ActivityItem[] = (bookingsQuery.data ?? []).map((booking) => ({
+      id: `booking-${booking._id}`,
+      type: "booking",
+      customerName: booking.userId.fullname,
+      description: `Booked ${booking.packageId.title}`,
+      status: booking.status,
+      createdAt: booking.createdAt,
+    }));
+
+    const visaItems: ActivityItem[] = (visaQuery.data ?? []).map((request) => ({
+      id: `visa-${request._id}`,
+      type: "visa",
+      customerName: request.userId.fullname,
+      description: `Requested ${request.visaType} visa for ${request.country}`,
+      status: request.status,
+      createdAt: request.createdAt,
+    }));
+
+    return [...bookingItems, ...visaItems]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, 6);
+  }, [bookingsQuery.data, visaQuery.data]);
 
   return (
     <Stack gap="lg">
@@ -64,6 +90,8 @@ export default function DashboardPage() {
           {pendingBookings} booking{pendingBookings === 1 ? "" : "s"} awaiting review.
         </Text>
       ) : null}
+
+      <RecentActivity items={recentActivity} isLoading={bookingsQuery.isPending || visaQuery.isPending} />
     </Stack>
   );
 }
