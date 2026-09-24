@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Group, Modal, NumberInput, Stack, Textarea, TextInput } from "@mantine/core";
+import { Avatar, Button, FileInput, Group, Modal, NumberInput, Stack, Text, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useEffect } from "react";
 
@@ -20,7 +20,7 @@ const EMPTY_VALUES = {
   description: "",
   duration: "",
   price: 0,
-  image: "",
+  image: null as File | null,
 };
 
 export function PackageFormModal({
@@ -52,7 +52,7 @@ export function PackageFormModal({
             description: initialValues.description,
             duration: initialValues.duration,
             price: initialValues.price,
-            image: initialValues.image ?? "",
+            image: null,
           }
         : EMPTY_VALUES
     );
@@ -60,7 +60,7 @@ export function PackageFormModal({
   }, [opened, initialValues]);
 
   function handleSubmit(values: typeof form.values) {
-    onSubmit({ ...values, price: Number(values.price), image: values.image || undefined });
+    onSubmit({ ...values, price: Number(values.price), image: values.image ?? undefined });
   }
 
   return (
@@ -90,11 +90,24 @@ export function PackageFormModal({
               {...form.getInputProps("price")}
             />
           </Group>
-          <TextInput
-            label="Image URL (optional)"
-            placeholder="https://..."
-            {...form.getInputProps("image")}
-          />
+          <Group align="flex-end" gap="sm">
+            <FileInput
+              label="Image (optional)"
+              placeholder="Upload an image"
+              accept="image/jpeg,image/png,image/webp"
+              clearable
+              style={{ flex: 1 }}
+              {...form.getInputProps("image")}
+            />
+            {initialValues?.image && !form.values.image ? (
+              <Stack gap={2} align="center">
+                <Avatar src={initialValues.image} radius="sm" size={36} />
+                <Text size="xs" c="dimmed">
+                  Current
+                </Text>
+              </Stack>
+            ) : null}
+          </Group>
 
           <Group justify="flex-end" mt="sm">
             <Button variant="default" onClick={onClose}>

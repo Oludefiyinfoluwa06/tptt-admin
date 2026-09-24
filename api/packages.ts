@@ -16,8 +16,21 @@ export type PackagePayload = {
   description: string;
   duration: string;
   price: number;
-  image?: string;
+  image?: File;
 };
+
+function toFormData(payload: PackagePayload): FormData {
+  const formData = new FormData();
+  formData.append("title", payload.title);
+  formData.append("destination", payload.destination);
+  formData.append("description", payload.description);
+  formData.append("duration", payload.duration);
+  formData.append("price", String(payload.price));
+  if (payload.image) {
+    formData.append("image", payload.image);
+  }
+  return formData;
+}
 
 export async function getPackages(): Promise<Package[]> {
   const { data } = await apiClient.get<{ packages: Package[] }>("/packages");
@@ -25,12 +38,12 @@ export async function getPackages(): Promise<Package[]> {
 }
 
 export async function createPackage(payload: PackagePayload): Promise<Package> {
-  const { data } = await apiClient.post<{ package: Package }>("/packages", payload);
+  const { data } = await apiClient.post<{ package: Package }>("/packages", toFormData(payload));
   return data.package;
 }
 
 export async function updatePackage(id: string, payload: PackagePayload): Promise<Package> {
-  const { data } = await apiClient.put<{ package: Package }>(`/packages/${id}`, payload);
+  const { data } = await apiClient.put<{ package: Package }>(`/packages/${id}`, toFormData(payload));
   return data.package;
 }
 
